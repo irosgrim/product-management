@@ -14,9 +14,23 @@ export interface Product {
     contain_articles: ProductArticle[]
 }
 
+export interface ProductAndAvailability extends Product {
+    potential_availability: number;
+}
+
 export interface Products {
     products: Product[];
 }
 export interface Inventory {
     inventory: InventoryItem[];
 }
+
+export interface Dictionary<T> {
+    [Key: string]: T;
+}
+
+export interface InventoryDictionary {
+    [Key: string]: { name: string; stock: number};
+}
+
+export type DbType = 'fake' | 'real' | undefined;

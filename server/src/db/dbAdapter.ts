@@ -1,11 +1,6 @@
-import path from 'path';
-import { getFile, partialStringMatch } from '../helpers/db';
-import { Inventory, InventoryItem, Product, Products } from './types';
-const inventoryFilePath = path.resolve('./src/db/inventory.json');
-const productsFilePath = path.resolve('./src/db/products.json');
-
-export type DbType = 'fake' | 'real' | undefined;
-
+import { getProductsAndAvailability, partialStringMatch } from '../helpers/db';
+import { DbType, InventoryDictionary, InventoryItem, Product, ProductAndAvailability} from '../types/types';
+import { inMemoryInventory, inMemoryProducts } from './connect';
 export class DB {
     constructor() {
     }
@@ -21,46 +16,51 @@ export class DB {
 
 class FakeDb {
     constructor() {}
-    private async allProducts(): Promise<Product[]> {
-        const parsedProducts = await getFile(productsFilePath) as Products;
-        if(parsedProducts.products) {
-            return parsedProducts.products;
-        }
-        return [];
+
+    public async getAllInventory(): Promise<InventoryDictionary> {
+        return inMemoryInventory;
     }
 
-    private async allInventory(): Promise<InventoryItem[]> {
-        const parsedInventory = await getFile(inventoryFilePath) as Inventory;
-        if(parsedInventory.inventory) {
-            return parsedInventory.inventory;
-        }
-        return [];
-    }
-
-    public async getAllInventory(): Promise<InventoryItem[]> {
-        return this.allInventory();
-    }
-
-    public async getInventoryItemById(id: string): Promise<InventoryItem | undefined> {
-        const allInventory = await this.allInventory()
-        return allInventory.find(inventoryItem => inventoryItem.art_id === id);
+    public async getInventoryItemById(id: string): Promise<{name: string; stock: number}> {
+        return inMemoryInventory[id];
     }
 
     public async getInventoryArticlesByName(str: string): Promise<InventoryItem[]> {
-        const allInventory = await this.allInventory();
         const strMatchesArticleName = partialStringMatch(str);
-        const searchResults = allInventory.filter(inventoryItem => strMatchesArticleName(inventoryItem.name));
+        let inventoryArr: InventoryItem[] = [];
+        for(const key in inMemoryInventory) {
+            inventoryArr = [...inventoryArr, {art_id: key, ...inMemoryInventory[key]}];
+        }
+        const searchResults = inventoryArr.filter(inventoryItem => strMatchesArticleName(inventoryItem.name));
         return searchResults;
     }
 
     public async getAllProducts(): Promise<Product[]> {
-        return this.allProducts() || [];
+        return inMemoryProducts;
     }
 
-    public async getProductWithProductName(productName: string): Promise<Product[]> {
-        const allProducts = await this.allProducts();
+    public async getProductsWithPartialProductName(productName: string): Promise<Product[]> {
         const strMatchesProductName = partialStringMatch(productName);
-        return allProducts.filter(product => strMatchesProductName(product.name));
+        return inMemoryProducts.filter(product => strMatchesProductName(product.name));
+    }
+
+    public async getProductWithProductName(productName: string): Promise<Product | undefined> {
+        return inMemoryProducts.find(product => product.name.toLowerCase() === productName.toLowerCase());
+    }
+
+    public async buyProduct(productName: string, amount: number): Promise<'OK' | undefined> {
+        const productThatMatchesQuery = await this.getProductWithProductName(productName);
+        if(productThatMatchesQuery) {
+            const productAndAvailability: ProductAndAvailability =  getProductsAndAvailability(productThatMatchesQuery);
+            if(productAndAvailability.potential_availability >= amount) {
+                for(const article of productAndAvailability.contain_articles) {
+                    inMemoryInventory[article.art_id].stock = inMemoryInventory[article.art_id].stock - article.amount_of;
+                }
+                return 'OK';
+            } else {
+                return;
+            }
+        }
     }
 }
 
@@ -70,17 +70,29 @@ class RealDb {
         return [];
     }
     public async getInventoryItemById(id: string): Promise<InventoryItem | undefined> {
+        id;
         return;
     }
     public async getInventoryArticlesByName(str: string): Promise<InventoryItem[]> {
+        str;
         return [];
     }
     public async getAllProducts(): Promise<Product[]> {
         
         return [];
     }
-    public async getProductWithProductName(productName: string): Promise<Product[]> {
+    public async getProductsWithPartialProductName(productName: string): Promise<Product[]> {
+        productName;
         return []
+    }
+    public async getProductWithProductName(productName: string): Promise<Product | undefined> {
+        productName
+        return undefined;
+    }
+    public async buyProduct(productName: string, amount: number): Promise<'OK' | undefined> {
+        productName;
+        amount;
+        return undefined;
     }
 }
 
