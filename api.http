@@ -16,6 +16,29 @@ http://localhost:3000/products/chair
 ### get product availability
 http://localhost:3000/availability
 
+### get product with availability
+http://localhost:3000/availability/Dining Chair
 
 ### buy a product
 POST http://localhost:3000/products/buy?product=Dining Chair&amount=1
+
+### add new product
+POST http://localhost:3000/products/create-product
+content-type: application/json
+
+{
+    "productName": "sample product2",
+    "containArticles": [ {
+          "art_id": "3",
+          "amount_of": "19"
+        },
+        {
+          "art_id": "2",
+          "amount_of": "10"
+        },
+        {
+          "art_id": "40",
+          "amount_of": "10"
+        }
+    ]
+}

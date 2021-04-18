@@ -1,5 +1,5 @@
 
-import { db } from '../db/connect';
+import { db, inMemoryProducts } from '../db/connect';
 
 import express from 'express';
 import Router from 'express';
@@ -38,6 +38,24 @@ productsRoute.post('/buy', async (req, res) => {
             return;
         }
         res.status(requestType.ok).send('OK!');
+        return;
+    }
+    res.status(requestType.ok).send('OK!');
+});
+
+productsRoute.post('/create-product', async (req, res) => {
+    const { productName, containArticles } = req.body;
+    if(!productName || !containArticles || containArticles.length === 0) {
+        res.status(requestType.badRequest).send();
+        return;
+    }
+    if(inMemoryProducts.filter(x => x.name === productName).length > 0) {
+        res.status(requestType.badRequest).send('PRODUCT ALREADY EXISTS!')
+        return;
+    }
+    const createProductResponse = await db.createNewProduct(productName, containArticles);
+    if(!createProductResponse) {
+        res.status(requestType.badRequest).send('NOT OK!');
         return;
     }
     res.status(requestType.ok).send('OK!');

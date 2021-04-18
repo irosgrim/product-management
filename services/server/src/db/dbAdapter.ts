@@ -1,6 +1,6 @@
 import { getProductsAndAvailability, partialStringMatch } from '../helpers/db';
-import { DbType, InventoryDictionary, InventoryItem, Product, ProductAndAvailability} from '../types/types';
-import { inMemoryInventory, inMemoryProducts } from './connect';
+import { DbType, InventoryDictionary, InventoryItem, Product, ProductAndAvailability, ProductArticle} from '../types/types';
+import { inMemoryInventory, inMemoryProducts, insertNewProductInMemoryProduct } from './connect';
 
 export class DB {
     constructor() {}
@@ -62,6 +62,20 @@ class FakeDb {
             }
         }
     }
+    public async createNewProduct(productName: string, containArticles: ProductArticle[]): Promise<'OK' | undefined> {
+        let temporaryProductContainArticles: ProductArticle[] = [];
+        for(const article of (containArticles as ProductArticle[])) {
+            if(!inMemoryInventory[article.art_id] || !article.amount_of) {
+                temporaryProductContainArticles = [];
+                return;
+            }
+            if(temporaryProductContainArticles.filter(x => x.art_id === article.art_id).length === 0) {
+                temporaryProductContainArticles = [...temporaryProductContainArticles, article]
+            }
+        }
+        const newProduct = {name: productName, contain_articles: temporaryProductContainArticles};
+        return insertNewProductInMemoryProduct(newProduct);
+    }
 }
 
 class RealDb {
@@ -70,29 +84,25 @@ class RealDb {
         return [];
     }
     public async getInventoryItemById(id: string): Promise<InventoryItem | undefined> {
-        id;
         return;
     }
     public async getInventoryArticlesByName(str: string): Promise<InventoryItem[]> {
-        str;
         return [];
     }
     public async getAllProducts(): Promise<Product[]> {
-        
         return [];
     }
     public async getProductsWithPartialProductName(productName: string): Promise<Product[]> {
-        productName;
-        return []
+        return [];
     }
     public async getProductWithProductName(productName: string): Promise<Product | undefined> {
-        productName
-        return undefined;
+        return;
     }
     public async buyProduct(productName: string, amount: number): Promise<'OK' | undefined> {
-        productName;
-        amount;
-        return undefined;
+        return;
+    }
+    public async createNewProduct(productName: string, containArticles: ProductArticle[]): Promise<'OK' | undefined> {
+        return;
     }
 }
 

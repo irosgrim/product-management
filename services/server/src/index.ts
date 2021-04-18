@@ -6,7 +6,7 @@ import { inventoryRoute } from './routes/inventory';
 import { productsRoute } from './routes/products';
 const app = express();
 const PORT = 3000;
-
+app.use(express.json());
 
 app.use('/products', productsRoute);
 app.use('/inventory', inventoryRoute);

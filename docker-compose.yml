@@ -2,7 +2,6 @@ version: '3'
 
 services:
 
-    # Proxies requests to internal services
     reverse-proxy:
         image: nginx:1.17.10
         container_name: reverse-proxy

@@ -25,3 +25,7 @@ function createInMemoryDB() {
     }
 }
 
+export async function insertNewProductInMemoryProduct(newProduct: Product): Promise<'OK' | undefined> {
+    inMemoryProducts = await [...inMemoryProducts, newProduct];
+    return 'OK';
+}

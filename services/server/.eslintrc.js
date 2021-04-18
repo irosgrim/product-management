@@ -22,6 +22,7 @@ module.exports = {
         "jest"
     ],
     "rules": {
-        "no-console": 1
+        "no-console": 1,
+        "no-unused-vars": 0
     }
 };
