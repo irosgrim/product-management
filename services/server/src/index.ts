@@ -1,12 +1,14 @@
 require('dotenv').config();
 export const rootDirectoryPath = __dirname;
 import express from 'express';
+import cors from 'cors';
 import { availabilityRoute } from './routes/availability';
 import { inventoryRoute } from './routes/inventory';
 import { productsRoute } from './routes/products';
 const app = express();
 const PORT = 3000;
 app.use(express.json());
+app.use(cors());
 
 app.use('/products', productsRoute);
 app.use('/inventory', inventoryRoute);

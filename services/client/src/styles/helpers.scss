@@ -1,0 +1,68 @@
+@import '@/styles/vars.scss';
+
+.position {
+    &-relative {
+        position: relative;
+    }
+    &-absolute {
+        position: absolute;
+    }
+}
+
+.d-flex {
+    display: flex;
+}
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.justify-content {
+    &-center {
+        justify-content: center;
+    }
+    &-between {
+        justify-content: space-between;
+    }
+}
+
+.justify-content-end {
+    justify-content: flex-end;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.no-list-style {
+    list-style-type: none;
+}
+
+.ml {
+    &-3 {
+        margin-left: 1rem;
+    }
+}
+
+.text {
+    &-left {
+        text-align: left;
+    }
+    &-right {
+        text-align: right;
+    }
+    &-bold {
+        font-weight: bold;
+    }
+    &-color-light {
+        color: $gray-300;
+    }
+}
+
+.w {
+    &-100 {
+        width: 100%;
+    }
+}
+.no-pointer-events {
+    pointer-events: none;
+}

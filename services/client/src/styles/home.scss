@@ -1,0 +1,120 @@
+@import '@/styles/vars.scss';
+
+.search-bar {
+    width: 100%;
+    padding: 0 3rem 0 1rem;
+}
+.position-right {
+    right: 12px;
+    top: 7px;
+}
+.clear-btn {
+    border-radius: 50%;
+    height: 27px;
+    width: 27px;
+    color: $light-orange;
+    border: 2px solid $light-orange;
+    font-weight: bold;
+    &:focus {
+        color: $danger;
+        border: 2px solid $danger;
+    }
+}
+
+.search-buttons {
+    margin-top: 1rem;
+    li {
+        min-width: 100px;
+        margin: 0 0.5rem;
+        button {
+            border: none;
+            height: auto;
+            width: 100%;
+            padding: 0.25rem 1rem;
+            &.active {
+                border-bottom: 1px solid $light-blue;
+            }
+            &:focus {
+                font-weight: bold;
+            }
+        }
+    }
+    li:nth-child(even) {
+        border-left: $border-size solid $gray-300;
+    }
+}
+main {
+    margin-top: 2rem;
+}
+
+.table {
+    border: 1px solid $gray-200;
+    .row{
+        width: 100%;
+        border-bottom: 1px solid $gray-200;
+        button {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            border: none;
+            height: fit-content;
+            &:focus {
+                position: relative;
+                &::before {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 4px;
+                    height: 100%;
+                    background-color: $dark-blue;
+                    z-index: 10;
+               }
+            }
+        }
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+}
+.table-heading {
+    padding: 0.5rem 1rem;
+}
+.availability {
+    border-left: 1px solid $gray-200;
+    min-width: 150px;
+}
+
+.availability-indicator {
+    height: 17px;
+    width: 17px;
+    border-radius: 50%;
+    &.none {
+        background-color: red;
+    }
+    &.low {
+        background-color: $danger;
+    }
+    &.medium {
+        background-color: $light-yellow;
+    }
+    &.high {
+        background-color: $success;
+    }
+}
+
+.secondary-nav {
+    text-align: left;
+    margin-bottom: 1rem;
+    button {
+        border: none;
+        border-radius: 0;
+        padding: 0 0.5rem 0.5rem 0;
+        height: 20px;
+        font-weight: bold;
+        color: $dark-blue;
+        &:focus {
+            font-weight: bolder;
+            border-bottom: 1px solid $dark-blue;
+        }
+    }
+}
