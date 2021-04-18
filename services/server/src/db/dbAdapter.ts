@@ -1,9 +1,9 @@
 import { getProductsAndAvailability, partialStringMatch } from '../helpers/db';
 import { DbType, InventoryDictionary, InventoryItem, Product, ProductAndAvailability} from '../types/types';
 import { inMemoryInventory, inMemoryProducts } from './connect';
+
 export class DB {
-    constructor() {
-    }
+    constructor() {}
     public useDb(dbType: DbType = 'fake') {
         switch(dbType) {
             case 'fake':
@@ -16,7 +16,7 @@ export class DB {
 
 class FakeDb {
     constructor() {}
-
+    
     public async getAllInventory(): Promise<InventoryDictionary> {
         return inMemoryInventory;
     }

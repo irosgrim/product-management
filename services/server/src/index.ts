@@ -1,4 +1,5 @@
 require('dotenv').config();
+export const rootDirectoryPath = __dirname;
 import express from 'express';
 import { availabilityRoute } from './routes/availability';
 import { inventoryRoute } from './routes/inventory';

@@ -1,5 +1,5 @@
-import { getProductsAndAvailability, partialStringMatch } from '../src/helpers/db';
-import { RequestStatus } from '../src/helpers/routes';
+import { getProductsAndAvailability, partialStringMatch } from '../helpers/db';
+import { RequestStatus } from '../helpers/routes';
 
 describe('Route helper', () => {
     const sut = new RequestStatus();
