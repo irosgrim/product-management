@@ -28,11 +28,13 @@
         margin: 0 0.5rem;
         button {
             border: none;
+            border-radius: 0;
             height: auto;
             width: 100%;
             padding: 0.25rem 1rem;
             &.active {
                 border-bottom: 1px solid $light-blue;
+                font-weight: bold;
             }
             &:focus {
                 font-weight: bold;
@@ -40,7 +42,16 @@
         }
     }
     li:nth-child(even) {
-        border-left: $border-size solid $gray-300;
+        position: relative;
+        ::before {
+            content: '';
+            position: absolute;
+            height: 70%;
+            width: 1px;
+            background-color: $gray-300;
+            top: 4px;
+            left: -9px;
+        }
     }
 }
 main {
@@ -116,5 +127,11 @@ main {
             font-weight: bolder;
             border-bottom: 1px solid $dark-blue;
         }
+    }
+}
+.components-table {
+    > li {
+        padding: 0.5rem;
+        border-bottom: 1px solid $gray-200;
     }
 }

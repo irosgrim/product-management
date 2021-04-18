@@ -11,13 +11,13 @@ productsRoute.get('/', async (req, res: express.Response) => {
     res.send(products);
 })
 
-productsRoute.get('/:productName', async (req, res,) => {
-    const productName = req.params.productName;
-    if(!productName) {
+productsRoute.get('/:partialProductName', async (req, res,) => {
+    const partialProductName = req.params.partialProductName;
+    if(!partialProductName) {
         res.status(requestType.badRequest).send();
         return;
     }
-    const product =  await db.getProductsWithPartialProductName(productName);
+    const product =  await db.getProductsWithPartialProductName(partialProductName);
     if(!product) {
         res.status(requestType.notFound).send();
         return;

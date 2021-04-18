@@ -66,3 +66,7 @@
 .no-pointer-events {
     pointer-events: none;
 }
+.col-3 {
+    flex: 0 0 auto;
+    width: 25%
+}

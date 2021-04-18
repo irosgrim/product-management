@@ -23,12 +23,12 @@ inventoryRoute.get('/:itemId', async (req, res) => {
     res.send(item);
 });
 
-inventoryRoute.get('/search/:str', async (req, res) => {
-    const searchString = req.params.str;
-    if(!searchString) {
+inventoryRoute.get('/search/:partialArticleName', async (req, res) => {
+    const partialArticleName = req.params.partialArticleName;
+    if(!partialArticleName) {
         res.status(requestType.badRequest).send();
     }
-    const item =  await db.getInventoryArticlesByName(searchString);
+    const item =  await db.getInventoryArticlesByName(partialArticleName);
     if(!item) {
         res.status(requestType.notFound).send();
     }

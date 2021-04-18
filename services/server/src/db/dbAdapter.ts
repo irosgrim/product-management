@@ -1,6 +1,6 @@
 import { getProductsAndAvailability, partialStringMatch } from '../helpers/db';
 import { DbType, InventoryDictionary, InventoryItem, Product, ProductAndAvailability, ProductArticle} from '../types/types';
-import { inMemoryInventory, inMemoryProducts, insertNewProductInMemoryProduct } from './connect';
+import { inMemoryInventoryDictionary, inMemoryProducts, insertNewProductInMemoryProduct } from './connect';
 
 export class DB {
     constructor() {}
@@ -18,18 +18,18 @@ class FakeDb {
     constructor() {}
     
     public async getAllInventory(): Promise<InventoryDictionary> {
-        return inMemoryInventory;
+        return inMemoryInventoryDictionary;
     }
 
     public async getInventoryItemById(id: string): Promise<{name: string; stock: number}> {
-        return inMemoryInventory[id];
+        return inMemoryInventoryDictionary[id];
     }
 
     public async getInventoryArticlesByName(str: string): Promise<InventoryItem[]> {
         const strMatchesArticleName = partialStringMatch(str);
         let inventoryArr: InventoryItem[] = [];
-        for(const key in inMemoryInventory) {
-            inventoryArr = [...inventoryArr, {art_id: key, ...inMemoryInventory[key]}];
+        for(const key in inMemoryInventoryDictionary) {
+            inventoryArr = [...inventoryArr, {art_id: key, ...inMemoryInventoryDictionary[key]}];
         }
         const searchResults = inventoryArr.filter(inventoryItem => strMatchesArticleName(inventoryItem.name));
         return searchResults;
@@ -54,7 +54,7 @@ class FakeDb {
             const productAndAvailability: ProductAndAvailability =  getProductsAndAvailability(productThatMatchesQuery);
             if(productAndAvailability.potential_availability >= amount) {
                 for(const article of productAndAvailability.contain_articles) {
-                    inMemoryInventory[article.art_id].stock = inMemoryInventory[article.art_id].stock - article.amount_of;
+                    inMemoryInventoryDictionary[article.art_id].stock = inMemoryInventoryDictionary[article.art_id].stock - article.amount_of;
                 }
                 return 'OK';
             } else {
@@ -65,7 +65,7 @@ class FakeDb {
     public async createNewProduct(productName: string, containArticles: ProductArticle[]): Promise<'OK' | undefined> {
         let temporaryProductContainArticles: ProductArticle[] = [];
         for(const article of (containArticles as ProductArticle[])) {
-            if(!inMemoryInventory[article.art_id] || !article.amount_of) {
+            if(!inMemoryInventoryDictionary[article.art_id] || !article.amount_of) {
                 temporaryProductContainArticles = [];
                 return;
             }

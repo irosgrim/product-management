@@ -1,6 +1,6 @@
 import Router from 'express';
 import { inMemoryProducts } from '../db/connect';
-import { getProductsAndAvailability } from '../helpers/db';
+import { getProductsAndAvailability, partialStringMatch } from '../helpers/db';
 import { requestType } from '../helpers/routes';
 import { ProductAndAvailability } from '../types/types';
 export const availabilityRoute = Router();
@@ -15,11 +15,13 @@ availabilityRoute.get('/', async (req, res) => {
 
 availabilityRoute.get('/:productName', async (req, res) => {
     const productName = req.params.productName;
-    const productWithAvailability: ProductAndAvailability | undefined= inMemoryProducts.map(product => {
+    const strMatchesArticleName = partialStringMatch(productName);
+
+    const productWithAvailability: ProductAndAvailability[]= inMemoryProducts.map(product => {
         return getProductsAndAvailability(product);
-    }).find(product => product.name === productName);
-    if(!productWithAvailability) {
-        res.status(requestType.notFound).send('NOT FOUND!');
+    }).filter(product => strMatchesArticleName(product.name));
+    if(productWithAvailability.length === 0) {
+        res.send([]);
         return;
     }
     res.send(productWithAvailability);

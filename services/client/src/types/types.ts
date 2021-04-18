@@ -1,0 +1,1 @@
+export type AvailabilityIndicator = 'low' | 'medium' | 'high' | 'none';

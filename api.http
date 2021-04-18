@@ -5,7 +5,7 @@ http://localhost:3000/inventory
 http://localhost:3000/inventory/3
 
 ### get inventory articles by name
-http://localhost:3000/inventory/search/tabl
+http://localhost:3000/inventory/search/scr
 
 ### get all products
 http://localhost:3000/products
@@ -37,7 +37,7 @@ content-type: application/json
           "amount_of": "10"
         },
         {
-          "art_id": "40",
+          "art_id": "4",
           "amount_of": "10"
         }
     ]

@@ -10,7 +10,7 @@ const productsFilePath = path.resolve(rootDirectoryPath + '/dbFiles/products.jso
 const typeOfDbToUse = process.env.DB_TYPE || 'fake';
 
 export let inMemoryProducts: Product[] = [];
-export let inMemoryInventory: InventoryDictionary = {};
+export let inMemoryInventoryDictionary: InventoryDictionary = {};
 createInMemoryDB();
 
 export const db = new DB().useDb(typeOfDbToUse as DbType);
@@ -21,7 +21,7 @@ function createInMemoryDB() {
         const parsedInventory = fs.readFileSync(inventoryFilePath, 'utf8');
         inMemoryProducts = JSON.parse(parsedProducts).products;
         const inventory = JSON.parse(parsedInventory).inventory;
-        inMemoryInventory = getInventoryAsDictionary(inventory);
+        inMemoryInventoryDictionary = getInventoryAsDictionary(inventory);
     }
 }
 

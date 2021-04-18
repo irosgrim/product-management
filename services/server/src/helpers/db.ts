@@ -1,4 +1,4 @@
-import { inMemoryInventory } from '../db/connect';
+import { inMemoryInventoryDictionary } from '../db/connect';
 import { InventoryDictionary, InventoryItem, Product, ProductAndAvailability } from '../types/types';
 
 export function partialStringMatch(searchString: string): (str: string) => boolean {
@@ -11,7 +11,7 @@ export function partialStringMatch(searchString: string): (str: string) => boole
 export function getProductsAndAvailability(product: Product): ProductAndAvailability {
     let potentialAvailabilityByArticleAmount: number[] = [];
     for(const productContent of product.contain_articles) {
-        const inventoryStockAmount = inMemoryInventory[productContent.art_id].stock;
+        const inventoryStockAmount = inMemoryInventoryDictionary[productContent.art_id].stock;
         const nrOfProductsBasedOnStockAmount = Math.floor(inventoryStockAmount / productContent.amount_of);
         potentialAvailabilityByArticleAmount= [...potentialAvailabilityByArticleAmount, nrOfProductsBasedOnStockAmount];
     }
