@@ -140,7 +140,6 @@ export default class ProductsTable extends Vue {
             productName: this.newProduct.productName,
             containArticles: this.newProduct.containArticles.filter(article => article.amount_of > 0 && article.amount !== null)
         };
-        console.log(newProduct);
         const sendProductResponse = await api.submitNewProduct(newProduct);
         if(!sendProductResponse) {
             this.productSubmitError = 'Could not add new product!'
