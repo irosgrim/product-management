@@ -3,7 +3,7 @@ import fs from 'fs';
 import { DB} from './dbAdapter';
 import { DbType, InventoryDictionary, Product } from '../types/types';
 import { getInventoryAsDictionary } from '../helpers/db';
-import { rootDirectoryPath } from '..';
+import { rootDirectoryPath } from '../index';
 const inventoryFilePath = path.resolve(rootDirectoryPath + '/dbFiles/inventory.json');
 const productsFilePath = path.resolve(rootDirectoryPath + '/dbFiles/products.json');
 

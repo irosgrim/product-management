@@ -1,3 +1,5 @@
+import { CreateNewProduct, DetailedProduct, InventoryDictionary, InventoryItem, ProductAndAvailability } from '@/types/types';
+
 const params = new URLSearchParams(window.location.search);
 const useFakeEndpoints = params.get('fake');
 const serverBaseUrl = 'http://localhost:3000'
@@ -12,80 +14,87 @@ class Endpoints {
 }
 
 class FakeEndpoints {
-    public async getAllAvailability(): Promise<number[]> {
-        return [1, 2, 3];
-    }
-    public async searchProductsByName(partialName: string): Promise<any> {
+    public async getAllAvailability(): Promise<ProductAndAvailability[]> {
         return [];
     }
-    public async searchInventoryByArticleName(partialArticleName: string): Promise<any> {
+    public async searchProductsByName(partialName: string): Promise<ProductAndAvailability[]> {
+        return [];
+    }
+    public async searchInventoryByArticleName(partialArticleName: string): Promise<InventoryItem[]> {
         return []
     }
-    public async getAllInventory(): Promise<any[]> {
+    public async getAllInventory(): Promise<InventoryItem[]> {
         return [];
     }
-    public async getProductWithName(productName): Promise<any> {
+    public async getProductWithName(productName: string): Promise<DetailedProduct | undefined> {
+        return ;
+    }
+    private async getInventoryItemById(articleId: string): Promise<{name: string; stock: number}> {
+        return {name: '', stock: 1}
+    }
+    public async submitNewProduct(newProduct: CreateNewProduct): Promise<CreateNewProduct | undefined> {
         return;
     }
-    public async submitNewProduct(newProduct): Promise<any> {
+    public async buyProduct(product: {product: string; amount: number}): Promise<{product: string; amount: number} | undefined> {
         return;
     }
-    // public async getAllProducts(): Promise<number[]> {
-        
-    //     return [1, 2, 3];
-    // }
-    // public searchProductsByName() {}
-    // public getAllInventory() {}
-    // public searchInventoryByArticleName() {}
-    
-    // public getAvailabilityForProduct() {}
 }
 
 class RealEndpoints {
     constructor() {}
-    public async getAllAvailability(): Promise<any> {
+    public async getAllAvailability(): Promise<ProductAndAvailability[]> {
         const availability = await fetch(serverBaseUrl + '/availability');
         return availability.json();
     }
-    public async searchProductsByName(partialName: string): Promise<any> {
+    public async searchProductsByName(partialName: string): Promise<ProductAndAvailability[]> {
         const searchResult = await fetch(serverBaseUrl + '/availability/' + partialName);
         return searchResult.json();
     }
-    public async searchInventoryByArticleName(partialArticleName: string): Promise<any> {
-        const searchResult = await fetch(serverBaseUrl + '/inventory/search/' + partialArticleName);
+    public async searchInventoryByArticleName(partialArticleName: string): Promise<InventoryItem[]> {
+        if(partialArticleName === '') {
+            const searchResult = await this.getAllInventory();
+            return searchResult;
+        }
+        const searchResult = await fetch(serverBaseUrl + '/inventory/' + partialArticleName);
         return searchResult.json();
     }
-    public async getAllInventory(): Promise<any[]> {
+    public async getAllInventory(): Promise<InventoryItem[]> {
         const inventoryResponse = await fetch(serverBaseUrl + '/inventory');
-        const parsedInventory = await inventoryResponse.json();
-        let inventoryArrayFromDictionary = [];
+        const parsedInventory: InventoryDictionary = await inventoryResponse.json();
+        let inventoryArrayFromDictionary: InventoryItem[] = [];
+
         for(const article in parsedInventory) {
             const inventoryArticle = {art_id: article.toString(), ...parsedInventory[article]}
             inventoryArrayFromDictionary = [...inventoryArrayFromDictionary, inventoryArticle];
         }
+
         return inventoryArrayFromDictionary;
     }
-    public async getProductWithName(productName: string): Promise<any> {
+    public async getProductWithName(productName: string): Promise<DetailedProduct | undefined> {
         const searchResult = await fetch(serverBaseUrl + '/availability/' + productName);
-        const searchResultParsed = await searchResult.json();
+        const searchResultParsed: ProductAndAvailability[] = await searchResult.json();
+
         if(searchResultParsed.length) {
             const product = searchResultParsed[0];
-            const detailedProduct = {...product, contain_articles: []};
+            const detailedProduct: DetailedProduct = {...product, contain_articles: []};
+            console.log(detailedProduct);
+
             for(const article of product.contain_articles) {
                 const getInventoryItemByIdResponse = await this.getInventoryItemById(article.art_id);
                 const detailedArticle = {...article, name: getInventoryItemByIdResponse.name, stock: getInventoryItemByIdResponse.stock};
                 detailedProduct.contain_articles = [...detailedProduct.contain_articles, detailedArticle];
             }
+
             return detailedProduct;
         }
     }
 
-    private async getInventoryItemById(articleId: string): Promise<any> {
-        const searchResult = await fetch(serverBaseUrl +'/inventory/' + articleId);
+    private async getInventoryItemById(articleId: string): Promise<{name: string; stock: number}> {
+        const searchResult = await fetch(serverBaseUrl +'/inventory/id/' + articleId);
         return searchResult.json();
     }
 
-    public async submitNewProduct(newProduct): Promise<any | undefined> {
+    public async submitNewProduct(newProduct: CreateNewProduct): Promise<CreateNewProduct | undefined> {
         const createNewProductResponse = await fetch(serverBaseUrl + '/products/create-product', {
             method: 'POST',
             cache: 'no-cache',
@@ -94,17 +103,24 @@ class RealEndpoints {
             },
             body: JSON.stringify(newProduct)
         });
+
         if(createNewProductResponse.status !== 200) {
             return;
         }
+    
         return newProduct;
     }
-    // public getAvailabilityForProduct() {}
-    // public getAllProducts() {}
-    // public getAllInventory() {}
-    // public searchInventoryByArticleName() {}
-        
-    // }
+
+    public async buyProduct(product: {product: string; amount: number}): Promise<{product: string; amount: number} | undefined> {
+        const createNewProductResponse = await fetch(serverBaseUrl + `/products/buy?product=${product.product}&amount=${product.amount}`, {
+            method: 'POST',
+            cache: 'no-cache',
+        });
+        if(createNewProductResponse.status !== 200) {
+            return;
+        }
+        return product;
+    }
 
 }
 

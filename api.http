@@ -2,10 +2,10 @@
 http://localhost:3000/inventory
 
 ### get specific inventory item by id
-http://localhost:3000/inventory/3
+http://localhost:3000/inventory/id/3
 
 ### get inventory articles by name
-http://localhost:3000/inventory/search/scr
+http://localhost:3000/inventory/s
 
 ### get all products
 http://localhost:3000/products
@@ -17,7 +17,7 @@ http://localhost:3000/products/chair
 http://localhost:3000/availability
 
 ### get product with availability
-http://localhost:3000/availability/Dining Chai
+http://localhost:3000/availability/tab
 
 ### buy a product
 POST http://localhost:3000/products/buy?product=Dining Chair&amount=1

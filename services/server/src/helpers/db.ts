@@ -29,3 +29,11 @@ export function getInventoryAsDictionary(inv: InventoryItem[]): InventoryDiction
     }, {})
     return inventoryDictionary;
 }
+
+export async function inventoryDictionaryToInventoryItemArr(): Promise<InventoryItem[]> {
+    let inventoryArr: InventoryItem[] = [];
+    for(const key in inMemoryInventoryDictionary) {
+        inventoryArr = [...inventoryArr, {art_id: key, ...inMemoryInventoryDictionary[key]}];
+    }
+    return inventoryArr;
+}

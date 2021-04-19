@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <form action="">
+    <div>
         <div class="position-relative">
             <input 
                 type="text" 
@@ -8,19 +8,31 @@
                 :placeholder="getPlaceholder" 
                 v-model="searchString"
             >
-            <button type="button" class="position-absolute position-right clear-btn" v-if="searchString" @click="searchString = ''">
+            <button 
+                type="button" 
+                v-if="searchString" @click="searchString = ''"
+                class="position-absolute position-right clear-btn" 
+            >
                 x
             </button>
         </div>
         <nav class="search-nav">
             <ul class="d-flex no-list-style search-buttons">
                 <li>
-                    <button type="button" :class="currentViewIsActive('products')" @click="activeView = 'products'">
+                    <button 
+                        type="button" 
+                        :class="currentViewIsActive('products')" 
+                        @click="activeView = 'products'"
+                    >
                         Products
                     </button>
                 </li>
-                <li class="">
-                    <button type="button" :class="currentViewIsActive('inventory')" @click="activeView = 'inventory'">
+                <li>
+                    <button 
+                        type="button" 
+                        :class="currentViewIsActive('inventory')" 
+                        @click="activeView = 'inventory'"
+                    >
                         Inventory
                     </button>
                 </li>
@@ -30,20 +42,28 @@
             showing {{showResultAmount}} items out of {{showResultAmount}}
         </section>
         <main>
-            <ProductsTable v-if="products.length && activeView === 'products'" :products="products" @refresh-products="getAllProductsOrAllInventory"/>
-            <InventoryTable v-if="inventory.length && activeView === 'inventory'" :inventory="inventory"/>
+            <ProductsTable 
+                v-if="products.length && activeView === 'products'" 
+                :products="products" 
+                @refresh-products="getAllProductsOrAllInventory"
+            />
+            <InventoryTable 
+                v-if="inventory.length && activeView === 'inventory'" 
+                :inventory="inventory"
+            />
         </main>
-    </form>
+    </div>
   </div>
 </template>
 <script lang="ts">
 import { Vue, Component, Watch } from 'vue-property-decorator';
 import { endpoints } from '../api/endpoints';
+import { InventoryItem, ProductAndAvailability } from '../types/types';
 
 const api = endpoints.loadEndpoints();
 
 export type ActiveView = "products" | "inventory";
-let debounceTimer;
+let debounceTimer:number;
 
 
 @Component({
@@ -54,8 +74,8 @@ let debounceTimer;
 })
 export default class Home extends Vue {
 
-    public products: any = [];
-    public inventory: any = [];
+    public products: ProductAndAvailability[] = [];
+    public inventory: InventoryItem[] = [];
     public activeView: ActiveView = 'products';
     public searchString = '';
     public searchInProgress = false;
@@ -69,7 +89,7 @@ export default class Home extends Vue {
     }
 
     @Watch('activeView', {immediate: true})
-    public async getAllProductsOrAllInventory() {
+    public async getAllProductsOrAllInventory(): Promise<void> {
         this.searchString = '';
         if(this.activeView === 'products') {
             const getAllProductsAndAvailability = await api.getAllAvailability();
@@ -82,18 +102,18 @@ export default class Home extends Vue {
     }
 
     @Watch('searchString')
-    public searchStringChanged() {
+    public searchStringChanged(): void {
         this.debouncedSearch();
     }
 
-    public debouncedSearch() {
+    public debouncedSearch(): void {
         clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(() => {
+        debounceTimer = window.setTimeout(() => {
             this.search();
         }, 1000);
     }
 
-    public async search() {
+    public async search(): Promise<void> {
         if(this.activeView === 'products') {
             const searchResult = await api.searchProductsByName(this.searchString);
             this.products = searchResult;
@@ -104,7 +124,7 @@ export default class Home extends Vue {
         }
     }
 
-    public get showResultAmount() {
+    public get showResultAmount(): number {
         switch (this.activeView) {
             case 'products':
                 return this.products.length;
@@ -112,8 +132,6 @@ export default class Home extends Vue {
                 return this.inventory.length;
         }
     }
-    
-
 }
 </script>
 

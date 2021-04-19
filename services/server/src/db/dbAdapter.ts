@@ -1,4 +1,4 @@
-import { getProductsAndAvailability, partialStringMatch } from '../helpers/db';
+import { getProductsAndAvailability, inventoryDictionaryToInventoryItemArr, partialStringMatch } from '../helpers/db';
 import { DbType, InventoryDictionary, InventoryItem, Product, ProductAndAvailability, ProductArticle} from '../types/types';
 import { inMemoryInventoryDictionary, inMemoryProducts, insertNewProductInMemoryProduct } from './connect';
 
@@ -27,10 +27,8 @@ class FakeDb {
 
     public async getInventoryArticlesByName(str: string): Promise<InventoryItem[]> {
         const strMatchesArticleName = partialStringMatch(str);
-        let inventoryArr: InventoryItem[] = [];
-        for(const key in inMemoryInventoryDictionary) {
-            inventoryArr = [...inventoryArr, {art_id: key, ...inMemoryInventoryDictionary[key]}];
-        }
+        let inventoryArr: InventoryItem[] = await inventoryDictionaryToInventoryItemArr();
+    
         const searchResults = inventoryArr.filter(inventoryItem => strMatchesArticleName(inventoryItem.name));
         return searchResults;
     }
@@ -54,7 +52,7 @@ class FakeDb {
             const productAndAvailability: ProductAndAvailability =  getProductsAndAvailability(productThatMatchesQuery);
             if(productAndAvailability.potential_availability >= amount) {
                 for(const article of productAndAvailability.contain_articles) {
-                    inMemoryInventoryDictionary[article.art_id].stock = inMemoryInventoryDictionary[article.art_id].stock - article.amount_of;
+                    inMemoryInventoryDictionary[article.art_id].stock = inMemoryInventoryDictionary[article.art_id].stock - (article.amount_of * amount);
                 }
                 return 'OK';
             } else {

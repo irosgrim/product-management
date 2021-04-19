@@ -33,16 +33,14 @@
 <script lang="ts">
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { getAvailabilityStatus } from '../helpers/text';
-import { AvailabilityIndicator } from '../types/types'
+import { AvailabilityIndicator, InventoryItem } from '../types/types'
 
 @Component
 export default class InventoryTable extends Vue {
-    @Prop() public inventory!: any[];
-
+    @Prop() public inventory!: InventoryItem[];
 
     public getAvailabilityStatus(amount: number): AvailabilityIndicator {
         return getAvailabilityStatus(amount);
-
     }
 }
 </script>

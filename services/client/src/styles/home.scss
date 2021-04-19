@@ -147,3 +147,28 @@ main {
         }
     }
 }
+
+.info-button:hover {
+    position: relative;
+    &::after {
+        content: 'ⓘ';
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+    }
+}
+
+.buy-product {
+    input {
+        width: 50px; 
+        height: 23px;
+    }
+    button {
+        width: auto; 
+        font-size: 12px; 
+        height: 23px; 
+        border: 0; 
+        margin: 0 0.3rem;
+    }
+}

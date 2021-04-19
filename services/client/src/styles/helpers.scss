@@ -85,6 +85,11 @@
         width: 100%;
     }
 }
+.h {
+    &-100 {
+        height: 100%;
+    }
+}
 .no-pointer-events {
     pointer-events: none;
 }
