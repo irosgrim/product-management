@@ -30,7 +30,7 @@
             showing {{showResultAmount}} items out of {{showResultAmount}}
         </section>
         <main>
-            <ProductsTable v-if="products.length && activeView === 'products'" :products="products"/>
+            <ProductsTable v-if="products.length && activeView === 'products'" :products="products" @refresh-products="getAllProductsOrAllInventory"/>
             <InventoryTable v-if="inventory.length && activeView === 'inventory'" :inventory="inventory"/>
         </main>
     </form>
@@ -60,10 +60,6 @@ export default class Home extends Vue {
     public searchString = '';
     public searchInProgress = false;
 
-    public async created() {
-        
-    }
-
     public currentViewIsActive(view: ActiveView): 'active' | null {
         return this.activeView === view ? 'active' : null;
     }
@@ -73,7 +69,7 @@ export default class Home extends Vue {
     }
 
     @Watch('activeView', {immediate: true})
-    public async searchOnActiveViewChange() {
+    public async getAllProductsOrAllInventory() {
         this.searchString = '';
         if(this.activeView === 'products') {
             const getAllProductsAndAvailability = await api.getAllAvailability();

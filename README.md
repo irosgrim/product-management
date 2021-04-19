@@ -8,6 +8,7 @@
 - [ ] fix client side types
 - [ ] authentication
 - [ ] add new inventory
+- [ ] **client side** add create product based on the inventory
 
 
 ### Server

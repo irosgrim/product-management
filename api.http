@@ -17,7 +17,7 @@ http://localhost:3000/products/chair
 http://localhost:3000/availability
 
 ### get product with availability
-http://localhost:3000/availability/Dining Chair
+http://localhost:3000/availability/Dining Chai
 
 ### buy a product
 POST http://localhost:3000/products/buy?product=Dining Chair&amount=1

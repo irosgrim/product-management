@@ -27,6 +27,9 @@ class FakeEndpoints {
     public async getProductWithName(productName): Promise<any> {
         return;
     }
+    public async submitNewProduct(newProduct): Promise<any> {
+        return;
+    }
     // public async getAllProducts(): Promise<number[]> {
         
     //     return [1, 2, 3];
@@ -73,7 +76,6 @@ class RealEndpoints {
                 const detailedArticle = {...article, name: getInventoryItemByIdResponse.name, stock: getInventoryItemByIdResponse.stock};
                 detailedProduct.contain_articles = [...detailedProduct.contain_articles, detailedArticle];
             }
-            console.log(detailedProduct)
             return detailedProduct;
         }
     }
@@ -81,6 +83,21 @@ class RealEndpoints {
     private async getInventoryItemById(articleId: string): Promise<any> {
         const searchResult = await fetch(serverBaseUrl +'/inventory/' + articleId);
         return searchResult.json();
+    }
+
+    public async submitNewProduct(newProduct): Promise<any | undefined> {
+        const createNewProductResponse = await fetch(serverBaseUrl + '/products/create-product', {
+            method: 'POST',
+            cache: 'no-cache',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(newProduct)
+        });
+        if(createNewProductResponse.status !== 200) {
+            return;
+        }
+        return newProduct;
     }
     // public getAvailabilityForProduct() {}
     // public getAllProducts() {}
