@@ -5,6 +5,7 @@
 ### Run the project with Docker:
 
 `docker-compose up -d --build`
+- go to `http://localhost`
 
 ### To do
 
