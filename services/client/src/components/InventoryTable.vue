@@ -12,20 +12,17 @@
             </ul>
         </li>
         <li class="row" v-for="article in inventory" :key="article.art_id">
-            <ul class="d-flex flex-wrap w-100 justify-content-between no-list-style">
-                <li>
-                    <ul class="d-flex no-list-style">
-                        <li>{{ article.art_id }}</li>
-                        <li class="ml-3">{{ article.name }}</li>
-                    </ul>
-                </li>
-                <li class="availability">
-                    <div class="d-flex justify-content-end align-items-center">
-                        <span class="text-bold">{{ article.stock }} </span><span> pcs</span>
-                        <div class="availability-indicator ml-3" :class="getAvailabilityStatus(article.stock)"></div>
-                    </div>
-                </li>
-            </ul>
+            <div class="d-flex flex-wrap w-100 justify-content-between align-items-center" style="padding: 0 1rem">
+                <div class="d-flex" >
+                    <div>{{ article.art_id }}</div>
+                    <div class="ml-3">{{ article.name }}</div>
+                </div>
+                
+                <div class="d-flex justify-content-end align-items-center stock">
+                    <span class="text-bold">{{ article.stock }} </span><span> pcs</span>
+                    <div class="availability-indicator ml-3" :class="getAvailabilityStatus(article.stock)"></div>
+                </div>
+            </div>
         </li>
     </ul>
 </template>
@@ -46,7 +43,9 @@ export default class InventoryTable extends Vue {
 </script>
 
 <style lang="scss" scoped>
-    .row {
-       padding: 0.5rem 1rem;
-    }
+   .stock {
+       border-left: 1px solid #ebebeb; 
+       min-width: 120px; 
+       padding: 0.5rem
+   }
 </style>

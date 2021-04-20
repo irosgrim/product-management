@@ -89,24 +89,22 @@
 
         </Modal>
         <ul class="no-list-style table">
-            <li class="row table-heading">
+            <li class="row table-heading w-100">
                 <ul class="d-flex flex-wrap w-100 justify-content-between no-list-style text-bold">
                     <li>Product name</li>
                     <li>Availability</li>
                 </ul>
             </li>
-            <li class="row" v-for="(product, productIndex) in products" :key="productIndex">
-                <ul class="d-flex flex-wrap w-100 justify-content-between no-list-style">
-                    <li style="width: 80%; display:block">
-                        <button 
-                            type="button" 
-                            @click="showProductDetails(product.name)" 
-                            class="w-100 text-left row-button info-button"
-                        >
-                            {{product.name}}
-                        </button>
-                    </li>
-                    <li class="availability">
+            <li class="row w-100" v-for="(product, productIndex) in products" :key="productIndex">
+                <div class="d-flex w-100 justify-content-between no-list-style">
+                    <button 
+                        type="button" 
+                        @click="showProductDetails(product.name)" 
+                        class="text-left row-button info-button"
+                    >
+                        {{product.name}}
+                    </button>
+                    <div class="availability">
                         <div class="d-flex justify-content-end align-items-center h-100">
                             <span class="text-bold">
                                 {{product.potential_availability}} 
@@ -118,8 +116,8 @@
                                 :product="{name: product.name, availability: product.potential_availability}"
                             />
                         </div>
-                    </li>
-                </ul>
+                    </div>
+                </div>
             </li>
         </ul>
     </div>
