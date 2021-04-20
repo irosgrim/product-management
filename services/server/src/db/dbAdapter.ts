@@ -1,6 +1,6 @@
 import { getProductsAndAvailability, inventoryDictionaryToInventoryItemArr, partialStringMatch } from '../helpers/db';
 import { DbType, InventoryDictionary, InventoryItem, Product, ProductAndAvailability, ProductArticle} from '../types/types';
-import { inMemoryInventoryDictionary, inMemoryProducts, insertNewProductInMemoryProduct } from './connect';
+import { createInventoryArticle, inMemoryInventoryDictionary, inMemoryProducts, insertNewProductInMemoryProduct, updateInventoryDictionaryArticle } from './connect';
 
 export class DB {
     constructor() {}
@@ -60,6 +60,7 @@ class FakeDb {
             }
         }
     }
+
     public async createNewProduct(productName: string, containArticles: ProductArticle[]): Promise<'OK' | undefined> {
         let temporaryProductContainArticles: ProductArticle[] = [];
         for(const article of (containArticles as ProductArticle[])) {
@@ -73,6 +74,19 @@ class FakeDb {
         }
         const newProduct = {name: productName, contain_articles: temporaryProductContainArticles};
         return insertNewProductInMemoryProduct(newProduct);
+    }
+
+    public async updateInventoryArticle(article: {art_id: string; stock: number}): Promise<'OK' | undefined> {
+        const updateResponse = await updateInventoryDictionaryArticle(article);
+        return updateResponse;
+    }
+
+    public async createInventoryArticle(article: {name: string; stock: number}): Promise<{name: string; stock: number} | undefined> {
+        const createArticleResponse = await createInventoryArticle(article);
+        if(!createArticleResponse) {
+            return;
+        }
+        return article;
     }
 }
 
@@ -100,6 +114,12 @@ class RealDb {
         return;
     }
     public async createNewProduct(productName: string, containArticles: ProductArticle[]): Promise<'OK' | undefined> {
+        return;
+    }
+    public async updateInventoryArticle(article: {art_id: string; stock: number}): Promise<'OK' | undefined> { 
+        return;
+    }
+    public async createInventoryArticle(article: {name: string; stock: number}): Promise<{name: string; stock: number} | undefined> {
         return;
     }
 }

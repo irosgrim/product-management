@@ -48,7 +48,9 @@
                 @refresh-products="getAllProductsOrAllInventory"
             />
             <InventoryTable 
-                v-if="inventory.length && activeView === 'inventory'" 
+                v-if="inventory.length && activeView === 'inventory'"
+                @update-inventory-article="updateInventoryArticle"
+                @refresh-products="getAllProductsOrAllInventory"
                 :inventory="inventory"
             />
         </main>
@@ -69,7 +71,7 @@ let debounceTimer:number;
 @Component({
     components: {
         ProductsTable: () => import(/* webpackChunkName: "ProductsComponent" */ '../components/ProductsTable.vue'),
-        InventoryTable: () => import(/* webpackChunkName: "ProductsComponent" */ '../components/InventoryTable.vue')
+        InventoryTable: () => import(/* webpackChunkName: "InventoryComponent" */ '../components/InventoryTable.vue')
     }
 })
 export default class Home extends Vue {
@@ -131,6 +133,14 @@ export default class Home extends Vue {
             case 'inventory':
                 return this.inventory.length;
         }
+    }
+
+    public async updateInventoryArticle(article: {art_id: string; stock: number}): Promise<void> {
+        const updateInventoryArticleResponse = await api.updateInventoryArticle(article);
+        if(!updateInventoryArticleResponse) {
+            return;
+        }
+        this.getAllProductsOrAllInventory();
     }
 }
 </script>

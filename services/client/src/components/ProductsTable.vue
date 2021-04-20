@@ -1,6 +1,6 @@
 <template>
     <div>
-        <nav class="secondary-nav">
+        <nav class="secondary-nav text-left">
             <button 
                 type="button" 
                 @click="openCreateNewProductModal"
@@ -36,7 +36,7 @@
         </Modal>
         <Modal 
             v-if="showAddNewProductModal"  
-            @close-modal="showAddNewProductModal = false"
+            @close-modal="clearNewProduct"
         >
             <h4 class="mb-3">
                 Create a new product
@@ -82,7 +82,7 @@
                     </ul>
                 </div>
                 <div class="d-flex justify-content-between">
-                    <button class="p-x-3">CANCEL</button>
+                    <button class="p-x-3" @click="clearNewProduct">CANCEL</button>
                     <button class="p-x-3" type="submit">CREATE</button>
                 </div>
             </form>
@@ -111,10 +111,12 @@
                             </span>
                             <span> pcs</span>
                             <div class="availability-indicator ml-3 mr-3" :class="getAvailabilityStatus(product.potential_availability)"></div>
-                            <BuyProduct 
+                            <ActionControl 
                                 @buy-product="buyProduct" 
                                 :product="{name: product.name, availability: product.potential_availability}"
-                            />
+                            >
+                                BUY
+                            </ActionControl>
                         </div>
                     </div>
                 </div>
@@ -128,14 +130,14 @@ import { Vue, Component, Prop } from 'vue-property-decorator';
 import { endpoints } from '../api/endpoints';
 import { getAvailabilityStatus } from '../helpers/text';
 import { AvailabilityIndicator, CreateNewProduct, DetailedProduct, InventoryItem, ProductAndAvailability } from '../types/types';
-import BuyProduct from '../components/BuyProduct.vue';
+import ActionControl from '../components/ActionControl.vue';
 
 const api = endpoints.loadEndpoints();
 
 @Component({
     components: {
         Modal: () => import(/* webpackChunkName: "Modal" */ '../components/Modal.vue'),
-        BuyProduct
+        ActionControl
     }
 })
 export default class ProductsTable extends Vue {
@@ -185,12 +187,7 @@ export default class ProductsTable extends Vue {
         } else {
             this.emitRefreshProducts();
         }
-        const newEmptyProduct = {
-            productName: '',
-            containArticles: []
-        }
-        Object.assign(this.newProduct, newEmptyProduct);
-        this.showAddNewProductModal = false;
+        this.clearNewProduct();
     }
 
     public async buyProduct(product: {product: string; amount: number}): Promise<void> {
@@ -204,6 +201,15 @@ export default class ProductsTable extends Vue {
 
     public emitRefreshProducts(): void {
         this.$emit('refresh-products');
+    }
+
+    public clearNewProduct(): void {
+        const newEmptyProduct = {
+            productName: '',
+            containArticles: []
+        }
+        Object.assign(this.newProduct, newEmptyProduct);
+        this.showAddNewProductModal = false;
     }
 }
 </script>

@@ -29,3 +29,16 @@ export async function insertNewProductInMemoryProduct(newProduct: Product): Prom
     inMemoryProducts = await [...inMemoryProducts, newProduct];
     return 'OK';
 }
+
+export async function updateInventoryDictionaryArticle(article: {art_id: string; stock: number;}): Promise<'OK' | undefined> {
+    if(inMemoryInventoryDictionary[article.art_id] && typeof article.stock === 'number') {
+        inMemoryInventoryDictionary[article.art_id].stock = article.stock;
+        return 'OK';
+    }
+}
+
+export async function createInventoryArticle(article: {name: string, stock: number}): Promise<'OK' | undefined> {
+    const ids = await Object.keys(inMemoryInventoryDictionary);
+    inMemoryInventoryDictionary = {...inMemoryInventoryDictionary, [ids[ids.length - 1]]: {name: article.name, stock: article.stock}};
+    return 'OK';
+}

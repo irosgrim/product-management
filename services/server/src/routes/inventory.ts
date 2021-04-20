@@ -36,4 +36,33 @@ inventoryRoute.get('/id/:itemId', async (req, res) => {
     res.send(inventoryItemResponse);
 });
 
+inventoryRoute.post('/update', async (req, res) => {
+    const { art_id, stock } = req.query;
+    // @ts-ignore
+    if(!art_id || isNaN(stock)) {
+        res.status(requestType.badRequest).send('NOT OK!');
+        return;
+    }
+    const updateInventoryArticleResponse = await db.updateInventoryArticle({art_id: art_id as string, stock: Math.floor(Number(stock))});
+    if(!updateInventoryArticleResponse) {
+        res.status(requestType.notFound).send();
+    }
+    res.send(updateInventoryArticleResponse);
+});
+
+inventoryRoute.post('/create', async (req, res) => {
+    const { name, stock } = req.query;
+    // @ts-ignore
+    if(!name || isNaN(stock)) {
+        res.status(requestType.badRequest).send('NOT OK!');
+        return;
+    }
+    const createArticleResponse = await db.createInventoryArticle({name: name as string, stock: Math.floor(Number(stock))});
+    if(!createArticleResponse) {
+        res.status(requestType.notFound).send();
+    }
+    res.send(createArticleResponse);
+
+})
+
 

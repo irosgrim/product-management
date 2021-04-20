@@ -13,33 +13,6 @@ class Endpoints {
     }
 }
 
-class FakeEndpoints {
-    public async getAllAvailability(): Promise<ProductAndAvailability[]> {
-        return [];
-    }
-    public async searchProductsByName(partialName: string): Promise<ProductAndAvailability[]> {
-        return [];
-    }
-    public async searchInventoryByArticleName(partialArticleName: string): Promise<InventoryItem[]> {
-        return []
-    }
-    public async getAllInventory(): Promise<InventoryItem[]> {
-        return [];
-    }
-    public async getProductWithName(productName: string): Promise<DetailedProduct | undefined> {
-        return ;
-    }
-    private async getInventoryItemById(articleId: string): Promise<{name: string; stock: number}> {
-        return {name: '', stock: 1}
-    }
-    public async submitNewProduct(newProduct: CreateNewProduct): Promise<CreateNewProduct | undefined> {
-        return;
-    }
-    public async buyProduct(product: {product: string; amount: number}): Promise<{product: string; amount: number} | undefined> {
-        return;
-    }
-}
-
 class RealEndpoints {
     constructor() {}
     public async getAllAvailability(): Promise<ProductAndAvailability[]> {
@@ -122,6 +95,61 @@ class RealEndpoints {
         return product;
     }
 
+    public async updateInventoryArticle(article: {art_id: string; stock: number}): Promise<{art_id: string; stock: number} | undefined> {
+        const updateInventoryArticleResponse = await fetch(serverBaseUrl +`/inventory/update?art_id=${article.art_id}&stock=${article.stock}`, {
+            method: 'POST',
+            cache: 'no-cache'
+        });
+        if(updateInventoryArticleResponse.status !== 200) {
+            return;
+        }
+        return article;
+    }
+
+    public async submitNewInventoryArticle(article: {name: string; stock: number}): Promise<{name: string; stock: number} | undefined> {
+        const newInventoryArticleresponse = await fetch(serverBaseUrl + `/inventory/create?name=${article.name}&stock=${article.stock}`, {
+            method: 'POST',
+            cache: 'no-cache'
+        });
+        if(newInventoryArticleresponse.status !== 200) {
+            return;
+        }
+        return article;
+    }
+}
+
+
+class FakeEndpoints {
+    public async getAllAvailability(): Promise<ProductAndAvailability[]> {
+        return [];
+    }
+    public async searchProductsByName(partialName: string): Promise<ProductAndAvailability[]> {
+        return [];
+    }
+    public async searchInventoryByArticleName(partialArticleName: string): Promise<InventoryItem[]> {
+        return []
+    }
+    public async getAllInventory(): Promise<InventoryItem[]> {
+        return [];
+    }
+    public async getProductWithName(productName: string): Promise<DetailedProduct | undefined> {
+        return ;
+    }
+    private async getInventoryItemById(articleId: string): Promise<{name: string; stock: number}> {
+        return {name: '', stock: 1}
+    }
+    public async submitNewProduct(newProduct: CreateNewProduct): Promise<CreateNewProduct | undefined> {
+        return;
+    }
+    public async buyProduct(product: {product: string; amount: number}): Promise<{product: string; amount: number} | undefined> {
+        return;
+    }
+    public async updateInventoryArticle(article: {art_id: string; stock: number}): Promise<{art_id: string; stock: number} | undefined> {
+        return;
+    }
+    public async submitNewInventoryArticle(article: {name: string; stock: number}): Promise<{name: string; stock: number} | undefined> {
+        return;
+    }
 }
 
 export const endpoints = new Endpoints();

@@ -7,6 +7,11 @@ http://localhost:3000/inventory/id/3
 ### get inventory articles by name
 http://localhost:3000/inventory/s
 
+### update inventory article
+POST http://localhost:3000/inventory/update?art_id=1&stock=19
+### update inventory article
+POST http://localhost:3000/inventory/create?name=bricks&stock=20
+
 ### get all products
 http://localhost:3000/products
 
