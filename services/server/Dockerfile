@@ -18,7 +18,6 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY package*.json ./
-COPY .env ./
 RUN npm ci --quiet --only=production
 
 COPY --from=builder /usr/src/app/build ./

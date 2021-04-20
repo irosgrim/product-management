@@ -3,15 +3,13 @@
 ### To do
 
 - [ ] use websocket to poll inventory changes
-- [ ] error handling
 - [ ] log server
-- [ ] fix client side types
 - [ ] authentication
 - [ ] add new inventory
+- [ ] error handling
+- [x] **client side** fix types
 - [x] **client side** add create product based on the inventory
-
-### Server
-
+- [x] **client side** buy product
 - [x] endpoints product availability:
     - [x] get all products detail and availability: `/availability`
     - [x] get product details and availability by partial name: `/availability/:partial name`

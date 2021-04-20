@@ -3,14 +3,15 @@ version: '3'
 services:
 
     reverse-proxy:
-        image: nginx:1.17.10
+        image: reverse-proxy
         container_name: reverse-proxy
+        build:
+            context: ./services/reverse-proxy
         depends_on:
             - product-management-client
-        volumes:
-            - ./services/reverse-proxy/nginx.conf:/etc/nginx/nginx.conf
         ports:
             - 80:80
+        restart: always
 
     product-management-client:
         image: product-management-client
@@ -20,7 +21,7 @@ services:
         volumes:
             - ./services/client/dist:/usr/src/app/www
         ports:
-            - 3300:3300
+            - 8080:80
         restart: on-failure
 
     product-management-server:
@@ -30,6 +31,26 @@ services:
             context: ./services/server
         ports:
             - 3000:3000
-        env_file:
-            - ./services/server/.env
+        environment:
+            - DB_TYPE=fake
         restart: on-failure
+
+    # example setup
+    # logger:
+    #     image: logger
+    #     container_name: logger
+    #     build:
+    #         context: ./services/logger
+    #     ports:
+    #         - 3000:3000
+    #     restart: on-failure
+
+    # database:
+    #     image: database
+    #     container_name: database
+    #     build:
+    #         context: ./services/database
+    #     
+    #     ports:
+    #         - 3001:3000
+    #     restart: on-failure

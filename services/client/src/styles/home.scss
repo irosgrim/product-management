@@ -48,21 +48,22 @@
             position: absolute;
             height: 70%;
             width: 1px;
-            background-color: $gray-300;
+            background-color: $gray-200;
             top: 4px;
             left: -9px;
         }
     }
 }
+
 main {
     margin-top: 2rem;
 }
 
 .table {
-    border: 1px solid $gray-200;
+    border: 1px solid $gray-100;
     .row{
         width: 100%;
-        border-bottom: 1px solid $gray-200;
+        border-bottom: 1px solid $gray-100;
         .row-button {
             width: 100%;
             padding: 0.5rem 1rem;
@@ -87,11 +88,13 @@ main {
         }
     }
 }
+
 .table-heading {
     padding: 0.5rem 1rem;
 }
+
 .availability {
-    border-left: 1px solid $gray-200;
+    border-left: 1px solid $gray-100;
     min-width: 150px;
     width:20%;
 }
@@ -130,16 +133,18 @@ main {
         }
     }
 }
+
 .components-table {
     > li {
         padding: 0.5rem;
-        border-bottom: 1px solid $gray-200;
+        border-bottom: 1px solid $gray-100;
     }
 }
+
 .component-list {
     li {
         margin-bottom: 0.5rem;
-        border-bottom: 1px solid $gray-200;
+        border-bottom: 1px solid $gray-100;
         button {
             border: 0;
             width: 50%;

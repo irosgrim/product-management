@@ -50,7 +50,7 @@ class FakeDb {
         const productThatMatchesQuery = await this.getProductWithProductName(productName);
         if(productThatMatchesQuery) {
             const productAndAvailability: ProductAndAvailability =  getProductsAndAvailability(productThatMatchesQuery);
-            if(productAndAvailability.potential_availability >= amount) {
+            if(productAndAvailability.potential_availability >= amount && amount > 0) {
                 for(const article of productAndAvailability.contain_articles) {
                     inMemoryInventoryDictionary[article.art_id].stock = inMemoryInventoryDictionary[article.art_id].stock - (article.amount_of * amount);
                 }
