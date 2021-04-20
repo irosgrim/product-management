@@ -9,6 +9,7 @@ services:
             context: ./services/reverse-proxy
         depends_on:
             - product-management-client
+            - product-management-server
         ports:
             - 80:80
         restart: always

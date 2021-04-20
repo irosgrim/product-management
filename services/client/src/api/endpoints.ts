@@ -2,7 +2,7 @@ import { CreateNewProduct, DetailedProduct, InventoryDictionary, InventoryItem, 
 
 const params = new URLSearchParams(window.location.search);
 const useFakeEndpoints = params.get('fake');
-const serverBaseUrl = 'http://localhost:3000'
+const serverBaseUrl = 'http://localhost/api'
 
 class Endpoints {
     loadEndpoints() {
