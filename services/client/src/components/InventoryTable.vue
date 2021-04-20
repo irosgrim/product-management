@@ -63,8 +63,8 @@
                 </ul>
             </li>
             <li class="row d-flex justify-content-between align-items-center flex-wrap w-100" v-for="article in inventory" :key="article.art_id">
-                <div class="d-flex flex-wrap justify-content-between align-items-center" style="flex-grow: 1; min-width: 80%">
-                    <div class="d-flex" style="justify-content: flex-start;">
+                <div class="d-flex flex-wrap justify-content-between align-items-center id-and-name-container">
+                    <div class="d-flex id-and-name ml-3">
                         <div>{{ article.art_id }}</div>
                         <div class="ml-3">{{ article.name }}</div>
                     </div>
@@ -152,5 +152,12 @@ export default class InventoryTable extends Vue {
        @media(min-width: 600px) {
            width: auto;
        }
+   }
+   .id-and-name-container {
+       flex-grow: 1; 
+       min-width: 80%
+   }
+   .id-and-name {
+       justify-content: flex-start; 
    }
 </style>
