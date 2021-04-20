@@ -2,6 +2,10 @@
 
 ![product management sample app](pm.png)
 
+### Run the project with Docker:
+
+`docker-compose up -d --build`
+
 ### To do
 
 - [ ] use websocket to poll inventory changes
