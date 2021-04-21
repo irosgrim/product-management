@@ -39,6 +39,8 @@ export async function updateInventoryDictionaryArticle(article: {art_id: string;
 
 export async function createInventoryArticle(article: {name: string, stock: number}): Promise<'OK' | undefined> {
     const ids = await Object.keys(inMemoryInventoryDictionary);
-    inMemoryInventoryDictionary = {...inMemoryInventoryDictionary, [ids[ids.length - 1]]: {name: article.name, stock: article.stock}};
+    const lastIdInInventory = ids[ids.length-1];
+    const newId = (Number(lastIdInInventory) + 1).toString();
+    inMemoryInventoryDictionary[newId] = {name: article.name, stock: article.stock};
     return 'OK';
 }
