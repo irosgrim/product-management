@@ -4,6 +4,7 @@ import { DB} from './dbAdapter';
 import { DbType, InventoryDictionary, Product } from '../types/types';
 import { getInventoryAsDictionary } from '../helpers/db';
 import { rootDirectoryPath } from '../index';
+import { uid } from '../helpers/uid';
 const inventoryFilePath = path.resolve(rootDirectoryPath + '/dbFiles/inventory.json');
 const productsFilePath = path.resolve(rootDirectoryPath + '/dbFiles/products.json');
 
@@ -38,9 +39,7 @@ export async function updateInventoryDictionaryArticle(article: {art_id: string;
 }
 
 export async function createInventoryArticle(article: {name: string, stock: number}): Promise<'OK' | undefined> {
-    const ids = await Object.keys(inMemoryInventoryDictionary);
-    const lastIdInInventory = ids[ids.length-1];
-    const newId = (Number(lastIdInInventory) + 1).toString();
+    const newId = uid(4);
     inMemoryInventoryDictionary[newId] = {name: article.name, stock: article.stock};
     return 'OK';
 }
